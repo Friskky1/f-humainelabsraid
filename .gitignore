@@ -3,5 +3,5 @@ client/*.lua
 server/*.lua
 config.lua
 README.md
-image/special_documents.png
 LICENSE
+image/special_documents.png
