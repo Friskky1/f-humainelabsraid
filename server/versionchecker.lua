@@ -17,6 +17,6 @@ end
  
 AddEventHandler('onResourceStart', function(resource)
    if resource ~= GetCurrentResourceName() then return end
-   local path = "https://raw.githubusercontent.com/Friskky1/f-humainelabsraid-versionchecker/main/fxmanifest.lua" -- your git user/repo path
+   local path = "https://raw.githubusercontent.com/Friskky1/f-humainelabsraid/main/fxmanifest.lua" -- your git user/repo path
    PerformHttpRequest(path, checkVersion)
 end)
