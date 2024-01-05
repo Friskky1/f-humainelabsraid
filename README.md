@@ -7,7 +7,8 @@
 2. Add to your qb-core/shared/items.lua
 
 `-- f-humainelabsraid
-	['special_documents'] = {['name'] = 'special_documents',['label'] = 'Special Documents', ['weight'] = 100, ['type'] = 'item', ['image'] = 'special_documents.png',     ['unique'] = true,  ['useable'] = false, ['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'I wonder where you can take these documents too'},`
+	['special_documents'] = {['name'] = 'special_documents',['label'] = 'Special Documents', ['weight'] = 100, ['type'] = 'item', ['image'] = 'special_documents.png',     ['unique'] = true,  ['useable'] = false, ['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'I wonder where you can take these documents too'},
+	['transponder'] = {['name'] = 'transponder',['label'] = 'Transponder', ['weight'] = 100, ['type'] = 'item', ['image'] = 'transponder.png',     ['unique'] = true,  ['useable'] = false, ['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = ''},`
 
 3. Add the image to your inventory/html/images
 

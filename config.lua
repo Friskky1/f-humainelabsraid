@@ -4,19 +4,30 @@ Config.SewerDoorHack = {
     Hack = "alphanumeric", -- (alphabet, numeric, alphanumeric, greek, braille, runes)
     Time = 20, -- To finish the hack before auto fail (Seconds)
 }
-Config.HackItem = "electronickit"
+
+Config.HackItem = "transponder"
 
 Config.SafeLocations = { -- You can add more safes to rob
     [1] = { 
         coords = vector3(3560.48, 3667.7, 28.12), 
         heading = 169.66
-    }
+    },
 }
 
 Config.SafeHack = {
     Time = 15, -- Seconds
     Gridsize = 5, -- Gridsize (5, 6, 7, 8, 9, 10)
     IncorrectBlocks = 3 -- The amount of max blocks to get wrong before you fail
+}
+
+Config.BankTruck = {
+    startpedloc = vector4(741.75, 4170.96, 41.09, 164.26),
+    startped = "ig_trafficwarden",
+    cooldown = 120, -- (Minutes) Till it can be hit again
+    spawn = vector4(512.71, -3047.14, 6.07, 356.82),
+    deleteped = "s_m_m_fiboffice_01",
+    deletepedloc = vector4(437.4, 6455.81, 28.74, 324.15),
+    fuel = "LegacyFuel"
 }
 
 Config.UseMarkedBills = true -- If you use marked bills then the price of each marked bill will be worth the amount set in Config.SafeRewardAmount if false then it will give you the reward amount in cash
@@ -78,7 +89,10 @@ Config.PDAlerts = "qb" -- qb, ps, cd or custom (Configure to your dispatch syste
 
 
 
-Config.SewerDoor = { -- Dont Touch Unless you know what your doing (Needed for the initial Hack)
+
+
+
+Config.SewerDoor = { -- Dont Touch Unless you know what your doing (Needed for the initial Hack) Hopefully going to remove this soon
     Object = 19193616,
     Open = 249.78,
     Closed = 169.96,

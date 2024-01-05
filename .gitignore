@@ -1,0 +1,5 @@
+
+client/*.lua
+server/*.lua
+config.lua
+README.md

@@ -1,15 +1,19 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local HeistStarted = false
+local banktruckstarted = false
 local turnedInDocs = false
 local raidcooldown = Config.RaidCoolDown * 60
+local banktruckcooldown = Config.BankTruck.cooldown * 60
 
-local function cooldown()
+local function doorcooldown()
     while true do 
         if raidcooldown <= 0 then
             raidcooldown = Config.RaidCoolDown * 60
                 TriggerClientEvent("f-humainelabsraid:client:ClearTimeoutDoors", -1)
                 TriggerClientEvent("f-humainelabsraid:client:RaidSafeCooldown", -1)
+                HeistStarted = false
+                turnedInDocs = false
                 break
             else
                 raidcooldown = raidcooldown - 1
@@ -19,11 +23,36 @@ local function cooldown()
     end
 end
 
+local function banktruckcooldown()
+    while true do 
+        if banktruckcooldown <= 0 then
+            banktruckcooldown = Config.BankTruckCoolDown.cooldown * 60
+                banktruckstarted = false
+                break
+            else
+                banktruckcooldown = banktruckcooldown - 1
+            Wait(1000)
+        end
+        Wait(1)
+    end
+end
+
+RegisterNetEvent("f-humainelabsraid:server:BankTruckStarted", function()
+    local src = source
+    if banktruckstarted == true then
+        TriggerClientEvent('QBCore:Notify', src, "There is a cooldown to get another bank truck", "error", 5000)
+    else
+        TriggerClientEvent("f-humainelabsraid:client:spawnbanktruck", src)
+        banktruckstarted = true
+        banktruckcooldown()
+    end
+end)
+
 RegisterNetEvent("f-humainelabsraid:server:HeistStarted", function()
     HeistStarted = true
     TriggerClientEvent("f-humainelabsraid:client:SpawnGuards", -1)
     TriggerClientEvent("f-humainelabsraid:client:CanRobSafe", -1)
-    cooldown()
+    doorcooldown()
 end)
 
 RegisterNetEvent('f-humainelabsraid:server:removeHackItem', function()
@@ -87,5 +116,16 @@ RegisterNetEvent("f-humainelabsraid:server:DocumentsReward", function()
         else
             TriggerClientEvent('QBCore:Notify', src, "You already handed in the Special Documents", "error", 5000)
         end
+    end
+end)
+
+RegisterNetEvent("f-humainelabsraid:server:returnbanktruck", function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    if Player.Functions.AddItem(Config.HackItem, 1, false) then
+        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.HackItem], "add", 1)
+        TriggerClientEvent('QBCore:Notify', src, "You turned in the truck and they found a "..Config.HackItem.. ".", "primary", 5000)
     end
 end)

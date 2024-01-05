@@ -46,6 +46,7 @@ RegisterNetEvent("f-humainelabsraid:client:SewerDoorHack", function()
                     flags = 16,
                 }, {}, {}, function() -- Success
                     exports['ps-ui']:Scrambler(function(success)
+                        TriggerServerEvent("f-humainelabsraid:server:removeHackItem")
                         if success then
                             QBCore.Functions.Notify("You passed the hack the door will now open soon", "success", 5000)
                             TriggerEvent('animations:client:EmoteCommandStart', {"c"})
