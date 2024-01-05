@@ -15,8 +15,3 @@ server_script {
 shared_script {
     'config.lua',
 }
-
-escrow_ignore {
-    "client/pdalerts.lua",
-    "config.lua"
-}
