@@ -3,7 +3,7 @@ game 'gta5'
 lua54 'yes'
 
 author 'Friskky Developments'
-description 'Quick Humaine labs heist'
+description 'Humaine labs heist'
 version '1.5.1'
 
 client_scripts {
