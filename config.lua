@@ -7,6 +7,8 @@ Config.SewerDoorHack = {
 
 Config.HackItem = "transponder"
 
+Config.SafeHackItem = "trojan_usb"
+
 Config.SafeLocations = { -- You can add more safes to rob
     [1] = { 
         coords = vector3(3560.48, 3667.7, 28.12), 
@@ -39,14 +41,14 @@ Config.RareItemChance = math.random(1, 2) -- % chance to get the rare item
 Config.RareItemAmmount = 1
 Config.RareItem = 'security_card_02'
 
-Config.RaidCoolDown = 90 -- (Minutes) Till it can be hit again
+Config.RaidCoolDown = 90 -- (Minutes) Till heist can be hit again
 
 Config.DeliverDocPed = {
     model = "s_m_m_security_01", -- Model of the Special Documents hand in ped
     coords = vector4(569.4, -3126.81, 18.77, 355.4) -- Coords of the Special Documents hand in ped
 }
 
-Config.LabGuardAccuracy = 3 -- out of 100% how accurate guards are (dont recommend going above 5 or else they have aimbot)
+Config.LabGuardAccuracy = 3 -- out of 100% how accurate guards are (dont recommend going above 5 or else they will have aimbot)
 Config.LabGuardWeapon = { -- this must be the weapon hash not just the weapon item name --this randomises between different guns everytime the guards are spawned
     'WEAPON_PISTOL',
     'WEAPON_COMBATPDW',
@@ -67,7 +69,7 @@ Config.LabSecurity = {
     { coords = vector3(3596.07, 3703.44, 29.69), heading = 344.89, model = 's_m_m_fiboffice_02'},
 }
 
-Config.PDAlerts = "qb" -- qb, ps, cd or custom (Configure to your dispatch system)
+Config.PDAlerts = "qb" -- qb, ps, cd or custom (Configure to your dispatch system in client/pdalerts.lua)
 
 
 

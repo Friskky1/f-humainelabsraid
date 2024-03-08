@@ -57,31 +57,39 @@ end)
 
 
 RegisterNetEvent("f-humainelabsraid:client:SafeHack", function()
+    local HasItem = QBCore.Functions.HasItem(Config.SafeHackItem)
+
     if not isSafehacked then
-        QBCore.Functions.Progressbar('SafeHack', 'Hacking Into The Safe', 3000, false, true, {
-            disableMovement = true,
-            disableCarMovement = true,
-            disableMouse = false,
-            disableCombat = true
-            }, {
-                animDict = "anim@gangops@facility@servers@",
-                anim = "hotwire",
-                flags = 16,
-            }, {}, {}, function() -- Success
-                exports['ps-ui']:Thermite(function(success)
-                    if success then
-                        QBCore.Functions.Notify("You succeded the hack!", "success", 5000)
-                        Wait(500)
-                        TriggerServerEvent("f-humainelabsraid:server:SafeReward")
-                        isSafehacked = true
-                        TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-                    else
-                        QBCore.Functions.Notify("You failed the hack", "error", 5000)
-                    end
-                end, Config.SafeHack.Time, Config.SafeHack.Gridsize, Config.SafeHack.IncorrectBlocks)
-            end, function() -- Cancel
-            
-        end)
+        if HasItem then
+            QBCore.Functions.Progressbar('SafeHack', 'Hacking Into The Safe', 3000, false, true, {
+                disableMovement = true,
+                disableCarMovement = true,
+                disableMouse = false,
+                disableCombat = true
+                }, {
+                    animDict = "anim@gangops@facility@servers@",
+                    anim = "hotwire",
+                    flags = 16,
+                }, {}, {}, function() -- Success
+                    exports['ps-ui']:Thermite(function(success)
+                        if success then
+                            TriggerServerEvent("f-humainelabsraid:server:removeSafeHackItem")
+                            QBCore.Functions.Notify("You succeded the hack!", "success", 5000)
+                            Wait(500)
+                            TriggerServerEvent("f-humainelabsraid:server:SafeReward")
+                            isSafehacked = true
+                            TriggerEvent('animations:client:EmoteCommandStart', {"c"})
+                        else
+                            TriggerServerEvent("f-humainelabsraid:server:removeSafeHackItem")
+                            QBCore.Functions.Notify("You failed the hack", "error", 5000)
+                        end
+                    end, Config.SafeHack.Time, Config.SafeHack.Gridsize, Config.SafeHack.IncorrectBlocks)
+                end, function() -- Cancel
+                
+            end)
+        else
+            QBCore.Functions.Notify("You do not have the safe hack item", "error", 5000)
+        end
     else
         QBCore.Functions.Notify("The Safe has already been hacked", "error", 5000)
     end

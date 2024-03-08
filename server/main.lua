@@ -63,6 +63,14 @@ RegisterNetEvent('f-humainelabsraid:server:removeHackItem', function()
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.HackItem], "remove")
 end)
 
+RegisterNetEvent('f-humainelabsraid:server:removeSafeHackItem', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    if not Player then return end
+    Player.Functions.RemoveItem(Config.SafeHackItem, 1)
+    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.SafeHackItem], "remove")
+end)
+
 RegisterNetEvent('f-humainelabsraid:server:removeDocumentItem', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -81,7 +89,7 @@ RegisterNetEvent("f-humainelabsraid:server:SafeReward", function()
         if Player.Functions.AddItem("special_documents", 1, false) then
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["special_documents"], "add", 1)
             TriggerClientEvent('QBCore:Notify', src, "You got special documents?", "primary", 5000)
-            TriggerClientEvent("f-humainelabsraid:client:DeliverDocs", -1)
+            TriggerClientEvent("f-humainelabsraid:client:DeliverDocs", src)
         end
         if Config.IfWantRareItem then
             if rareitem <= Config.RareItemChance then
