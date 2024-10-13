@@ -54,8 +54,6 @@ RegisterNetEvent("f-humainelabsraid:client:CanRobSafe", function()
     CanRobSafe()
 end)
 
-
-
 RegisterNetEvent("f-humainelabsraid:client:SafeHack", function()
     local HasItem = QBCore.Functions.HasItem(Config.SafeHackItem)
 

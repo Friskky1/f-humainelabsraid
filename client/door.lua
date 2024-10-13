@@ -1,16 +1,19 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local SewerDoorOpen = false
+local elevatordoorsopen = false
 local HackItem = Config.HackItem
 local doorHacked = false
+local keypad = {}
+local elevatordoors = {1878909644, 1709395619}
 
 CreateThread(function()
-    local SewerDoorObject = Config.SewerDoor.Object
     while true do
         Wait(1000)
-
+        -- First Door
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
+        local SewerDoorObject = Config.SewerDoor.Object
         local HumaineDoorDist = #(pos - Config.SewerDoor.coords)
         if HumaineDoorDist < 50 then
             if SewerDoorObject == Config.SewerDoor.Object then
@@ -26,6 +29,21 @@ CreateThread(function()
             end
         else
             SewerDoorObject = Config.SewerDoor.Object
+        end
+
+        -- Elevator Doors
+        for _, ElevatorDoorsHash in ipairs(elevatordoors) do
+            local ElevatorDoorDist = #(pos - vector3(3540.31, 3673.48, 20.99))
+            local door = GetClosestObjectOfType(GetEntityCoords(ped), 5.0, ElevatorDoorsHash, false, false, false)
+            if DoesEntityExist(door) then
+                if ElevatorDoorDist < 50 then
+                    if elevatordoorsopen == true then
+                        FreezeEntityPosition(door, false)
+                    else
+                        FreezeEntityPosition(door, true) -- Prevent the door from moving
+                    end
+                end
+            end
         end
     end
 end)
@@ -52,6 +70,7 @@ RegisterNetEvent("f-humainelabsraid:client:SewerDoorHack", function()
                             TriggerEvent('animations:client:EmoteCommandStart', {"c"})
                             TriggerServerEvent("f-humainelabsraid:server:removeHackItem")
                             Wait(5000)
+                            AddExplosion(Config.SewerDoor.coords.xyz, 2, 500, true, false, 5)
                             SewerDoorOpen = true
                             doorHacked = true
                             TriggerServerEvent("f-humainelabsraid:server:HeistStarted")
@@ -72,9 +91,34 @@ RegisterNetEvent("f-humainelabsraid:client:SewerDoorHack", function()
     end
 end)
 
+RegisterNetEvent("f-humainelabsraid:client:ElevatorKeypadHack", function()
+    QBCore.Functions.TriggerCallback('getElevatorPassword', function(result)
+        local input = exports['ps-ui']:Input({
+            {
+                id = '1',
+                label = 'Enter a Number',
+                type = "number",
+                icon = "fas fa-hashtag"
+            }
+        })
+        if input then
+            local numberInput = tonumber(input[1].value)
+            if numberInput == result then
+                QBCore.Functions.Notify("Password Accepted", "success", 5000)
+                elevatordoorsopen = true
+            else
+                QBCore.Functions.Notify("Wrong Password", "error", 5000)
+            end
+        else
+            QBCore.Functions.Notify("No input received or input canceled", "error", 5000)
+        end
+    end, 'getElevatorPassword')
+end)
+
 RegisterNetEvent("f-humainelabsraid:client:ClearTimeoutDoors", function()
     SewerDoorOpen = false
     doorHacked = false
+    elevatordoorsopen = false
 end)
 
 CreateThread(function()
@@ -95,4 +139,32 @@ CreateThread(function()
         },
         distance = 2.5
     })
+    -- keypad
+    local keypadmodel = "prop_ld_keypad_01b"
+    RequestModel(keypadmodel) while not HasModelLoaded(keypadmodel) do Wait(10) end
+    keypad = CreateObject(keypadmodel, 3537.48, 3673.45, 21.2, true, false, false)
+    SetEntityHeading(keypad, 348.61)
+    FreezeEntityPosition(keypad, true)
+    exports['qb-target']:AddBoxZone("keypad", vector3(3537.48, 3673.45, 21.2), 0.3, 0.3, {
+        name = "keypad",
+        heading = 355.0,
+        debugPoly = false,
+        minZ = 21.2,
+        maxZ = 21.5,
+    }, {
+        options = {
+            {
+                type = "client",
+                event = "f-humainelabsraid:client:ElevatorKeypadHack",
+                icon = "fas fa-user-secret",
+                label = "Hack",
+            },
+        },
+        distance = 2.5
+    })
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    DeleteEntity(keypad)
 end)

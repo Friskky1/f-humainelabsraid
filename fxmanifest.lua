@@ -4,7 +4,7 @@ lua54 'yes'
 
 author 'Friskky Developments'
 description 'Humaine labs heist'
-version '1.5.2'
+version '2.0.0'
 
 client_scripts {
 	'client/*.lua'

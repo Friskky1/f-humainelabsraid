@@ -16,6 +16,11 @@ Config.SafeLocations = { -- You can add more safes to rob
     },
 }
 
+Config.ElevatorPassword = {
+    UseRandomNumber = true, -- 6 digit number printed to server console on resource start
+    PredefinedNumber = 123456
+}
+
 Config.SafeHack = {
     Time = 15, -- Seconds
     Gridsize = 5, -- Gridsize (5, 6, 7, 8, 9, 10)
@@ -25,11 +30,17 @@ Config.SafeHack = {
 Config.BankTruck = {
     startpedloc = vector4(741.75, 4170.96, 41.09, 164.26),
     startped = "ig_trafficwarden",
-    cooldown = 120, -- (Minutes) Till it can be hit again
+    cooldown = 120, -- (Minutes) Till it can be spawned again
     spawn = vector4(512.71, -3047.14, 6.07, 356.82),
     deleteped = "s_m_m_fiboffice_01",
     deletepedloc = vector4(437.4, 6455.81, 28.74, 324.15),
-    fuel = "LegacyFuel"
+    fuel = "LegacyFuel" -- cdn-fuel, LegacyFuel and ps-fuel
+}
+
+Config.ElevatorNote = {
+    price = 2, -- THE COST IS QBIT CRYPTO
+    pedlocation = vector4(729.77, -831.16, 25.39, 181.01),
+    pedmodel = "hc_hacker"
 }
 
 Config.UseMarkedBills = true -- If you use marked bills then the price of each marked bill will be worth the amount set in Config.SafeRewardAmount if false then it will give you the reward amount in cash

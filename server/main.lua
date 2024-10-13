@@ -4,7 +4,8 @@ local HeistStarted = false
 local banktruckstarted = false
 local turnedInDocs = false
 local raidcooldown = Config.RaidCoolDown * 60
-local banktruckcooldown = Config.BankTruck.cooldown * 60
+local banktruckCooldownTime = Config.BankTruck.cooldown * 60
+local ElevatorPassword = nil
 
 local function doorcooldown()
     while true do 
@@ -25,17 +26,29 @@ end
 
 local function banktruckcooldown()
     while true do 
-        if banktruckcooldown <= 0 then
-            banktruckcooldown = Config.BankTruckCoolDown.cooldown * 60
+        if banktruckCooldownTime <= 0 then
+            banktruckCooldownTime = Config.BankTruckCoolDown.cooldown * 60
                 banktruckstarted = false
                 break
             else
-                banktruckcooldown = banktruckcooldown - 1
+                banktruckCooldownTime = banktruckCooldownTime - 1
             Wait(1000)
         end
         Wait(1)
     end
 end
+
+local function generateElevatorPassword()
+    if Config.ElevatorPassword.UseRandomNumber then
+        return math.random(111111, 999999)
+    else
+        return Config.ElevatorPassword.PredefinedNumber
+    end
+end
+
+QBCore.Functions.CreateCallback('getElevatorPassword', function(source, cb)
+    cb(ElevatorPassword)
+end)
 
 RegisterNetEvent("f-humainelabsraid:server:BankTruckStarted", function()
     local src = source
@@ -77,6 +90,22 @@ RegisterNetEvent('f-humainelabsraid:server:removeDocumentItem', function()
     if not Player then return end
     Player.Functions.RemoveItem("special_documents", 1)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["special_documents"], "remove")
+end)
+
+RegisterNetEvent("f-humainelabsraid:server:BuyElevatorPasswordNote", function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    if not Player then return end
+    if Player.PlayerData.money.crypto >= Config.ElevatorNote.price then
+        Player.Functions.RemoveMoney("crypto", Config.ElevatorNote.price, "")
+        local info = {label = 'Elevator Password: ' .. ElevatorPassword}
+        if Player.Functions.AddItem('stickynote', 1, false, info, 'reason') then
+            TriggerClientEvent('qb-inventory:client:ItemBox', src, "stickynote", 'add')
+        end
+        TriggerClientEvent('QBCore:Notify', src, "This is only valid till next tsunami.", "success", 5000)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "You dont have enough money in your crypto wallet.", "error", 5000)
+    end
 end)
 
 RegisterNetEvent("f-humainelabsraid:server:SafeReward", function()
@@ -121,6 +150,7 @@ RegisterNetEvent("f-humainelabsraid:server:DocumentsReward", function()
                 end
             end
             turnedInDocs = true
+            TriggerEvent("f-humainelabsraid:server:raidend")
         else
             TriggerClientEvent('QBCore:Notify', src, "You already handed in the Special Documents", "error", 5000)
         end
@@ -136,4 +166,10 @@ RegisterNetEvent("f-humainelabsraid:server:returnbanktruck", function()
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.HackItem], "add", 1)
         TriggerClientEvent('QBCore:Notify', src, "You turned in the truck and they found a "..Config.HackItem.. ".", "primary", 5000)
     end
+end)
+
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    ElevatorPassword = generateElevatorPassword()
+    print("[SERVER] ELEVATOR PASSWORD: ^2" ..ElevatorPassword.."^0")
 end)
