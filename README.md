@@ -18,9 +18,3 @@ If you encounter any issues or have questions about this script, feel free to op
 ## Dependencies:
 qb-core\
 ps-ui [https://github.com/Project-Sloth/ps-ui]
-
-## Future Updates:
-None planned at the moment but some ideas will rise.
-
-## Code
-479 Lines of Code
