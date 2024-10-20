@@ -4,7 +4,7 @@ local checkVersion = function(err, response, headers)
     local resourceName = "f-humainelabsraid ("..GetCurrentResourceName()..")" -- the resource name
     local curVersion = GetResourceMetadata(GetCurrentResourceName(), 'version') -- make sure the "version" file actually exists in your resource root!
     if tostring(curVersion) == tostring(versionNumber) then
-        return print("^0[^2INFO^0] " .. resourceName .. " is up to date! (^2" .. curVersion .."^0)")
+        return print("^0[^2INFO^0] " .. resourceName .. " is up to date! (^2" .. curVersion .."^7)")
     end
 
     local errStr = "^3----------------------------------------------------^0\n"

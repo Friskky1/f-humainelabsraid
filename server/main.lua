@@ -171,5 +171,5 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then return end
     ElevatorPassword = generateElevatorPassword()
-    print("[SERVER] ELEVATOR PASSWORD: ^2" ..ElevatorPassword.."^0")
+    print("[SERVER] ELEVATOR PASSWORD: ^2" ..ElevatorPassword.."^7")
 end)
